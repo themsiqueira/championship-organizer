@@ -3,8 +3,12 @@ import Sequelize from 'sequelize';
 import databaseConfig from '../config/database';
 
 import User from '../app/models/User';
+import Team from '../app/models/Team';
+import Championship from '../app/models/Championship';
+import Games from '../app/models/Games';
+import Ranking from '../app/models/Ranking';
 
-const models = [User];
+const models = [User, Team, Championship, Games, Ranking];
 
 class Database {
   constructor() {
