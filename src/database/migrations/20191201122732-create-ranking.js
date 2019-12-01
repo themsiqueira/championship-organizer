@@ -29,11 +29,21 @@ module.exports = {
           allowNull: false,
         },
       },
+      victories: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: true,
+      },
       position: {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
       points: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+      },
+      pro_goals: {
         type: Sequelize.INTEGER,
         defaultValue: 0,
         allowNull: false,

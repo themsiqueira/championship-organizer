@@ -4,9 +4,11 @@ class Ranking extends Model {
   static init(sequelize) {
     super.init(
       {
+        victories: Sequelize.INTEGER,
         position: Sequelize.INTEGER,
         points: Sequelize.INTEGER,
         goals: Sequelize.INTEGER,
+        pro_goals: Sequelize.INTEGER,
       },
       {
         sequelize,
