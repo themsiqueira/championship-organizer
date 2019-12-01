@@ -4,6 +4,23 @@ import Games from '../models/Games';
 import Raking from '../models/Ranking';
 
 class ChampionshipController {
+  async index(req, res) {
+    const championships = await Championship.findAll({
+      where: { user_id: req.userId },
+    });
+
+    if (championships) {
+      return res.json({
+        message: 'Sucess to find championships',
+        championships,
+      });
+    }
+
+    return res.json({
+      message: 'Not found any championship',
+    });
+  }
+
   async store(req, res) {
     const { title, teams } = req.body;
 

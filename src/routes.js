@@ -2,6 +2,10 @@ import { Router } from 'express';
 
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
+import TeamController from './app/controllers/TeamController';
+import GamesController from './app/controllers/GamesController';
+import ChampionshipController from './app/controllers/ChampionshipController';
+import RankingController from './app/controllers/RankingController';
 
 import authMiddleware from './app/middlewares/auth';
 import { validationStoreSessionMiddleware } from './app/middlewares/validateSession';
@@ -95,5 +99,32 @@ routes.put(
   validationUpdateUserMiddleware,
   UserController.update
 );
+
+
+/**
+ * @api {put} /newTeam Cria novo time
+ * @apiGroup Championship
+ * @apiPermission authenticated user and must send "Bearer token"
+ * @apiParamExample {json} Request-Example:
+ *
+ *  [
+ *    {
+ *      name: yourTeamName,
+ *    },
+ *    {
+ *      name: yourTeamNameTo,
+ *    }
+ *  ]
+ *
+ * @apiSuccessExample {json} Sucesso
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "id": 1,
+ *      "name": "Seu Nome Cadastrado",
+ *      "email": "seuemailnovocadastrado@gmail.com",
+ *    }
+ */
+
+routes.post('/api/newTeam', TeamController.store);
 
 export default routes;
