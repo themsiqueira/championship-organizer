@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('championship', {
+    return queryInterface.createTable('games', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -10,7 +10,7 @@ module.exports = {
       championship_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'championship',
+          model: 'championships',
           key: 'id',
           onUpdate: 'CASCADE',
           onDelete: 'SET NULL',
@@ -66,6 +66,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('championship');
+    return queryInterface.dropTable('games');
   },
 };

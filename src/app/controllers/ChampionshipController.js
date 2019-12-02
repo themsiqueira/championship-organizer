@@ -35,7 +35,13 @@ class ChampionshipController {
       user_id: req.userId,
     });
 
-    const games = await this.createGames(teams, championship.id);
+    const championshipController = new ChampionshipController();
+
+    const games = await championshipController.createGames(
+      teams,
+      championship.id,
+      req.userId
+    );
 
     if (games === null) {
       return res.status(401).json({
@@ -43,7 +49,10 @@ class ChampionshipController {
       });
     }
 
-    const rankings = await this.setInitialRanking(teams, championship.id);
+    const rankings = await championshipController.setInitialRanking(
+      teams,
+      championship.id
+    );
 
     return res.json({
       message: 'Sucess to create championship',
@@ -55,26 +64,31 @@ class ChampionshipController {
 
   async createGames(teams, championshipId, userId) {
     let dontUse;
-    await teams.array.forEach(async team => {
+    const promises = teams.map(async team => {
       const checkTeam = await Team.findByPk(team);
       if (checkTeam.user_id !== userId) {
         dontUse = true;
       }
     });
 
+    await Promise.all(promises);
+
     if (dontUse) {
       return null;
     }
-    let games;
 
-    await teams.forEach(async teamOne => {
-      await teams.forEach(async teamTwo => {
+    const games = [];
+
+    teams.map(teamOne => {
+      teams.map(teamTwo => {
         if (teamOne !== teamTwo) {
-          const game = await Games.create({
+          const game = {
             championship_id: championshipId,
             first_team_id: teamOne,
             second_team_id: teamTwo,
-          });
+          };
+
+          Games.create(game);
           games.push(game);
         }
       });
@@ -84,26 +98,30 @@ class ChampionshipController {
   }
 
   async setInitialRanking(teams, championshipId) {
-    let names;
-    let teamsWithAllData;
-    let ranks;
+    const names = [];
+    const teamsWithAllData = [];
+    const ranks = [];
 
-    await teams.forEach(async team => {
+    const promises = teams.map(async team => {
       const teamWithAllData = await Team.findByPk(team);
       names.push(teamWithAllData.name);
       teamsWithAllData.push(teamWithAllData);
     });
+
+    await Promise.all(promises);
+
     const alphabeticalOrder = names.sort();
 
     let classification = 1;
-    await alphabeticalOrder.map(async name => {
-      await teamsWithAllData.map(async team => {
+    alphabeticalOrder.map(name => {
+      teamsWithAllData.map(team => {
         if (team.name === name) {
-          const rank = await Raking.create({
+          const rank = {
             team_id: team.id,
             championship_id: championshipId,
             position: classification,
-          });
+          };
+          Raking.create(rank);
           classification += 1;
           ranks.push(rank);
         }

@@ -229,8 +229,139 @@ routes.put('/api/updateTeam', TeamController.update);
 
 routes.delete('/api/deleteTeam', TeamController.delete);
 
+/**
+ * @api {post} /newChampionship Create a championship
+ * @apiGroup Championship
+ * @apiPermission authenticated user and must send "Bearer token"
+ * @apiParamExample {json} Request-Example:
+ *
+ *    {
+ *      "title": "Campeonato Brasileiro",
+ *      "teams": [1,2,3,4]
+ *    }
+ *
+ * @apiSuccessExample {json} Sucesso
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "message": "Sucess to create championship",
+ *      "championship": {
+ *           "id": 5,
+ *           "title": "Campeonato Brasileiro",
+ *           "user_id": 1,
+ *           "updatedAt": "2019-12-02T17:14:49.772Z",
+ *           "createdAt": "2019-12-02T17:14:49.772Z",
+ *           "complete": false
+ *       },
+ *       "games": [
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 1,
+ *               "second_team_id": 2
+ *           },
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 1,
+ *               "second_team_id": 3
+ *           },
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 1,
+ *               "second_team_id": 4
+ *           },
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 2,
+ *               "second_team_id": 1
+ *           },
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 2,
+ *               "second_team_id": 3
+ *           },
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 2,
+ *               "second_team_id": 4
+ *           },
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 3,
+ *               "second_team_id": 1
+ *           },
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 3,
+ *               "second_team_id": 2
+ *           },
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 3,
+ *               "second_team_id": 4
+ *           },
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 4,
+ *               "second_team_id": 1
+ *           },
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 4,
+ *               "second_team_id": 2
+ *           },
+ *           {
+ *               "championship_id": 5,
+ *               "first_team_id": 4,
+ *               "second_team_id": 3
+ *           }
+ *       ],
+ *       "rankings": [
+ *           {
+ *               "team_id": 3,
+ *               "championship_id": 5,
+ *               "position": 1
+ *           },
+ *          {
+ *               "team_id": 1,
+ *               "championship_id": 5,
+ *               "position": 2
+ *           },
+ *           {
+ *               "team_id": 4,
+ *               "championship_id": 5,
+ *               "position": 3
+ *           },
+ *           {
+ *               "team_id": 2,
+ *               "championship_id": 5,
+ *               "position": 4
+ *           }
+ *       ]
+ *     }
+ */
+
 routes.post('/api/newChampionship', ChampionshipController.store);
 
-routes.get('/api/getAllChampionship', ChampionshipController.index);
+/**
+ * @api {get} /getAllChampionships Atualiza nome do time
+ * @apiGroup Teams
+ * @apiPermission authenticated user and must send "Bearer token"
+ * @apiSuccessExample {json} Sucesso
+ *    HTTP/1.1 200 OK
+ *    {
+ *       "message": "Sucess to find championships",
+ *       "championships": [
+ *         {
+ *           "id": 5,
+ *           "title": "Campeonato Brasileiro",
+ *           "complete": false,
+ *           "createdAt": "2019-12-02T17:14:49.772Z",
+ *           "updatedAt": "2019-12-02T17:14:49.772Z",
+ *           "user_id": 1
+ *         }
+ *       ]
+ *     }
+ */
+
+routes.get('/api/getAllChampionships', ChampionshipController.index);
 
 export default routes;
