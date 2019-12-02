@@ -102,7 +102,7 @@ routes.put(
 
 
 /**
- * @api {put} /newTeam Cria novo time
+ * @api {post} /newTeam Cria novo time
  * @apiGroup Championship
  * @apiPermission authenticated user and must send "Bearer token"
  * @apiParamExample {json} Request-Example:
