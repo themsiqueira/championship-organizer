@@ -1,39 +1,47 @@
 import Team from '../models/Team';
 
 class TeamController {
-  store(req, res) {
+  async store(req, res) {
     const { teams } = req.body;
 
-    let result;
+    let result = [];
 
-    teams.forEach(async team => {
+    const promises = teams.map(async team => {
       const teamExists = await Team.findOne({ where: { name: team.name } });
-      if (teamExists) {
-        result.push(teamExists);
-      } else {
+      if (teamExists === null || teamExists === undefined) {
         const teamCreated = await Team.create({ ...team, user_id: req.userId });
         result.push(teamCreated);
       }
     });
 
-    return res.json(result);
+    await Promise.all(promises);
+
+    return res.json({ message: 'Sucess create new record', result });
   }
 
-  async get(req, res) {
+  async index(req, res) {
     const teams = await Team.findAll({ where: { user_id: req.userId } });
 
-    return res.json({ teams });
+    if(!teams) {
+      return res.json({ message: 'Nothing was found' });
+    }
+
+    return res.json({ message: 'Sucess to find teams', teams });
   }
 
-  async getByName(req, res) {
+  async indexByName(req, res) {
     const { name } = req.query;
-    const team = await Team.findAll({ where: { name, user_id: req.userId } });
+    const team = await Team.findOne({ where: { name, user_id: req.userId } });
 
-    return res.json({ team });
+    if(!team) {
+      return res.json({ message: 'Team not fount' });
+    }
+
+    return res.json({ message: "Sucess to find team", team });
   }
 
   async update(req, res) {
-    const { name, id } = req.body;
+    const { newName, id } = req.body;
 
     const teamToUpdate = await Team.findByPk(id);
 
@@ -43,9 +51,9 @@ class TeamController {
           .status(401)
           .json({ message: 'Permission denied to update this register' });
       }
-      const result = await teamToUpdate.update({ name });
+      const team = await teamToUpdate.update({ name: newName });
 
-      return res.json(result);
+      return res.json({ message: "Sucess to update team", team });
     }
 
     return res.status(400).json({ error: 'Team does not exists' });

@@ -22,8 +22,8 @@ const routes = new Router();
  * @apiParamExample {json} Request-Example:
  *
  *    {
- *      "email": "seuemailcadastrado@gmail.com",
- *      "password": "seupasswordcadasrado"
+ *      "email": "joao@gmail.com",
+ *      "password": "senhaProvisoria"
  *    }
  *
  * @apiSuccessExample {json} Sucesso
@@ -31,8 +31,8 @@ const routes = new Router();
  *    {
  *      "user": {
  *                "id": 1,
- *                "name": "Seu Nome Cadastrado",
- *                "email": "seuemailcadastrado@gmail.com",
+ *                "name": "Joao",
+ *                "email": "Joao@gmail.com",
  *              },
  *      "token": "awdiojawdoiisjvelisecaldwjljiafkamiolclc",
  *    }
@@ -50,17 +50,17 @@ routes.post(
  * @apiParamExample {json} Request-Example:
  *
  *    {
- *      "name": "Seu Nome Cadastrado"
- *      "email": "seuemailcadastrado@gmail.com",
- *      "password": "seupasswordcadasrado"
+ *       "name": "Joao",
+ *       "email": "Joao@gmail.com",
+ *       "password": "senhaProvisoria"
  *    }
  *
  * @apiSuccessExample {json} Sucesso
  *    HTTP/1.1 200 OK
  *    {
  *      "id": 1,
- *      "name": "Seu Nome Cadastrado",
- *      "email": "seuemailcadastrado@gmail.com",
+ *      "name": "Joao",
+ *      "email": "Joao@gmail.com",
  *    }
  */
 
@@ -76,21 +76,12 @@ routes.use(authMiddleware);
  * @api {put} /updateUser Atualização de usuário
  * @apiGroup User
  * @apiPermission authenticated user and must send "Bearer token"
- * @apiParamExample {json} Request-Example:
- *
- *    {
- *      "name": "Aqui vai seu nome obrigatório, caso queira alterar mande um novo",
- *      "email": "Aqui vai seu email obrigatório, caso queira alterar mande um novo caso",
- *      "oldPassword": "Aqui vai sua senha antiga caso pre queira mudar",
- *      "confirmPassword": "Aqui vai sua senha nova de novo para confirmação"
- *    }
- *
  * @apiSuccessExample {json} Sucesso
  *    HTTP/1.1 200 OK
  *    {
  *      "id": 1,
- *      "name": "Seu Nome Cadastrado",
- *      "email": "seuemailnovocadastrado@gmail.com",
+ *      "name": "Joao",
+ *      "email": "JoaoNovoEmail@gmail.com",
  *    }
  */
 
@@ -100,31 +91,146 @@ routes.put(
   UserController.update
 );
 
-
 /**
  * @api {post} /newTeam Cria novo time
- * @apiGroup Championship
+ * @apiGroup Teams
  * @apiPermission authenticated user and must send "Bearer token"
  * @apiParamExample {json} Request-Example:
  *
- *  [
- *    {
- *      name: yourTeamName,
- *    },
- *    {
- *      name: yourTeamNameTo,
- *    }
- *  ]
+ *  {
+ *     "teams": [
+ *       {
+ *         "name": "Flamengo"
+ *       },
+ *       {
+ *         "name": "Sao Paulo"
+ *       }
+ *     ]
+ *   }
  *
  * @apiSuccessExample {json} Sucesso
  *    HTTP/1.1 200 OK
  *    {
- *      "id": 1,
- *      "name": "Seu Nome Cadastrado",
- *      "email": "seuemailnovocadastrado@gmail.com",
- *    }
+ *      "message": "Sucess create new record",
+ *      "result": [
+ *                  {
+ *                    "id": 2,
+ *                    "name": "Flamengo",
+ *                    "user_id": 1,
+ *                    "updatedAt": "2019-12-02T13:37:17.205Z",
+ *                    "createdAt": "2019-12-02T13:37:17.205Z"
+ *                  },
+ *                  {
+ *                    "id": 1,
+ *                    "name": "Sao Paulo",
+ *                    "user_id": 1,
+ *                    "updatedAt": "2019-12-02T13:37:17.204Z",
+ *                    "createdAt": "2019-12-02T13:37:17.204Z"
+ *                  }
+ *                ]
+ *     }
  */
 
 routes.post('/api/newTeam', TeamController.store);
+
+/**
+ * @api {get} /getAllTeams Busca times criados pelo usuário
+ * @apiGroup Teams
+ * @apiPermission authenticated user and must send "Bearer token"
+ * @apiSuccessExample {json} Sucesso
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "message": "Sucess to find teams",
+ *      "result": [
+ *                  {
+ *                    "id": 2,
+ *                    "name": "Flamengo",
+ *                    "user_id": 1,
+ *                    "updatedAt": "2019-12-02T13:37:17.205Z",
+ *                    "createdAt": "2019-12-02T13:37:17.205Z"
+ *                  },
+ *                  {
+ *                    "id": 1,
+ *                    "name": "Sao Paulo",
+ *                    "user_id": 1,
+ *                    "updatedAt": "2019-12-02T13:37:17.204Z",
+ *                    "createdAt": "2019-12-02T13:37:17.204Z"
+ *                  }
+ *                ]
+ *     }
+ */
+
+routes.get('/api/getAllTeams', TeamController.index);
+
+/**
+ * @api {get} /getAllTeams Busca time por nome
+ * @apiGroup Teams
+ * @apiPermission authenticated user and must send "Bearer token"
+ * @apiParamExample {string} query paraam name=Sao Paulo
+ * @apiSuccessExample {json} Sucesso
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "message": "Sucess to find team",
+ *      "team": {
+ *                   "id": 1,
+ *                   "name": "Sao Paulo",
+ *                   "user_id": 1,
+ *                   "updatedAt": "2019-12-02T13:37:17.204Z",
+ *                   "createdAt": "2019-12-02T13:37:17.204Z"
+ *              }
+ *    }
+ */
+
+routes.get('/api/getTeamByName', TeamController.indexByName);
+
+/**
+ * @api {put} /updateTeam Atualiza nome do time
+ * @apiGroup Teams
+ * @apiPermission authenticated user and must send "Bearer token"
+ * @apiParamExample {json} Request-Example:
+ *
+ *  {
+ *     "id": 1,
+ *     "newName": "Tricolor"
+ *  }
+ *
+ * @apiSuccessExample {json} Sucesso
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "message": "Sucess to update team",
+ *      "team": {
+ *                   "id": 1,
+ *                   "name": "Tricolor",
+ *                   "user_id": 1,
+ *                   "updatedAt": "2019-12-02T14:07:25.544Z",
+ *                   "createdAt": "2019-12-02T13:37:17.204Z"
+ *              }
+ *    }
+ */
+
+routes.put('/api/updateTeam', TeamController.update);
+
+/**
+ * @api {delete} /deleteTeam Deleta o time por ID
+ * @apiGroup Teams
+ * @apiPermission authenticated user and must send "Bearer token"
+ * @apiParamExample {json} Request-Example:
+ *
+ *  {
+ *     "id": 1,
+ *  }
+ *
+ * @apiSuccessExample {json} Sucesso
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "message": "Sucess to delete team",
+ *    }
+ */
+
+routes.delete('/api/deleteTeam', TeamController.delete);
+
+routes.post('/api/newChampionship', ChampionshipController.store);
+
+routes.get('/api/getAllChampionship', ChampionshipController.index);
 
 export default routes;
