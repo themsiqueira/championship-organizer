@@ -1,4 +1,5 @@
 import Ranking from '../models/Ranking';
+import Team from '../models/Team';
 
 class RankingController {
   async index(req, res) {
@@ -7,9 +8,16 @@ class RankingController {
       where: {
         championship_id: championshipId,
       },
+      include: [
+        {
+          model: Team,
+          as: 'teams',
+          attributes: ['name', 'id'],
+        },
+      ],
     });
 
-    return res.json({ ranking });
+    return res.json({ message: 'Sucess to find ranking', ranking });
   }
 }
 

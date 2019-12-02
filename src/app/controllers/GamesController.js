@@ -27,7 +27,13 @@ class GamesController {
   }
 
   async update(req, res) {
-    const { gameId, firstTeamGoals, secondTeamGoals } = req.body;
+    const {
+      gameId,
+      firstTeamGoals,
+      secondTeamGoals,
+      firstTeamProGoals,
+      secondTeamProGoals,
+    } = req.body;
 
     const gameToUpdate = await Games.findByPk(gameId);
 
@@ -43,68 +49,124 @@ class GamesController {
 
     const gamesController = new GamesController();
 
-    const updateRanking = gamesController.setNewRanking(
+    const updateRanking = await gamesController.updateRankingData(
       gameToUpdate,
       firstTeamGoals,
-      secondTeamGoals
+      secondTeamGoals,
+      firstTeamProGoals,
+      secondTeamProGoals
     );
 
-    if (updateRanking) {
-      return res.json({ message: 'Sucess to update game and ranking' });
+    if (!updateRanking) {
+      return res.status(500).json({ message: 'Error to update ranking' });
     }
 
-    return res.status(500).json({ message: 'Error to update ranking' });
+    const result = gamesController.checkAndAjustRankAfterUpdate(
+      gameToUpdate.championship_id
+    );
+
+    if (!result) {
+      return res.status(500).json({ message: 'Error to update ranking' });
+    }
+
+    return res.json({ message: 'Sucess to update Game and ranking' });
   }
 
-  async setNewRanking(game, firstTeamGoals, secondTeamGoals) {
-    const ranking = await Ranking.findAll({
-      where: { championship_id: game.championship_id },
+  async updateRankingData(
+    game,
+    firstTeamGoals,
+    secondTeamGoals,
+    firstTeamProGoals,
+    secondTeamProGoals
+  ) {
+    const firstTeamRank = await Ranking.findOne({
+      where: {
+        team_id: game.first_team_id,
+      },
     });
-    let pointsToOrdenate;
+
+    const secondTeamRank = await Ranking.findOne({
+      where: {
+        team_id: game.second_team_id,
+      },
+    });
+
+    const newFirstTeamProGoals = firstTeamProGoals + firstTeamRank.pro_goals;
+    const newFirstTeamGoals = firstTeamGoals + firstTeamRank.goals;
+    const newSecondTeamGoals = secondTeamProGoals + secondTeamRank.goals;
+    const newSecondTeamProGoals = secondTeamProGoals + secondTeamRank.pro_goals;
 
     if (firstTeamGoals > secondTeamGoals) {
-      ranking.map(item => {
-        if (item.team_id === game.first_team_id) {
-          const newPoints = item.points + 3;
-          Ranking.update(
-            { points: newPoints },
-            {
-              where: { team_id: item.team_id },
-            }
-          );
-        }
-        pointsToOrdenate.push(item.points);
+      const points = firstTeamRank.points + 3;
+      const victories = firstTeamRank.victories + 1;
+
+      await firstTeamRank.update({
+        points,
+        victories,
+        pro_goals: newFirstTeamProGoals,
+        goals: newFirstTeamGoals,
       });
-    } else if (firstTeamGoals === secondTeamGoals) {
-      ranking.map(item => {
-        if (
-          item.team_id === game.first_team_id ||
-          item.team_id === game.second_team_id
-        ) {
-          const newPoints = item.points + 1;
-          item.update({ points: newPoints });
-        }
+
+      await secondTeamRank.update({
+        pro_goals: newSecondTeamGoals,
+        goals: newSecondTeamProGoals,
+      });
+    } else if (firstTeamGoals < secondTeamGoals) {
+      const points = secondTeamRank.points + 3;
+      const victories = secondTeamRank.victories + 1;
+      await secondTeamRank.update({
+        points,
+        victories,
+        pro_goals: secondTeamRank.points,
+        goals: newSecondTeamProGoals,
+      });
+
+      await firstTeamRank.update({
+        pro_goals: newFirstTeamProGoals,
+        goals: newFirstTeamGoals,
       });
     } else {
-      ranking.map(item => {
-        if (item.team_id === game.second_team_id) {
-          const newPoints = item.points + 3;
-          item.update({ points: newPoints });
-        }
+      let points = secondTeamRank.points + 1;
+      await secondTeamRank.update({
+        points,
+        pro_goals: newSecondTeamGoals,
+        goals: newSecondTeamProGoals,
+      });
+
+      points = firstTeamRank.points + 1;
+
+      await firstTeamRank.update({
+        points,
+        pro_goals: newFirstTeamProGoals,
+        goals: newFirstTeamGoals,
       });
     }
+    return true;
+  }
 
-    const rankToUpdate = await Ranking.findAll({
-      where: { championship_id: game.championship_id },
+  async checkAndAjustRankAfterUpdate(championship_id) {
+    const ranking = await Ranking.findAll({
+      where: { championship_id },
+      include: [
+        {
+          model: Team,
+          as: 'team',
+          attributes: ['name', 'id'],
+        },
+      ],
     });
 
-    const result = rankToUpdate.sort((a, b) => (a.points > b.points ? 1 : -1));
-
-    let newPosition;
-    result.map(async item => {
-      newPosition += 1;
-      await item.update({ position: newPosition });
+    const result = ranking.sort(function compararNumeros(a, b) {
+      return a.points - b.points;
     });
+
+    let newRank = 1;
+    const promisse = result.forEach(async item => {
+      await Ranking.update({ position: newRank }, { where: { id: item.id } });
+      newRank += 1;
+    });
+
+    await Promise.all(promisse);
 
     return true;
   }
