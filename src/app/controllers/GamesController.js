@@ -1,5 +1,6 @@
 import Games from '../models/Games';
 import Ranking from '../models/Ranking';
+import Team from '../models/Team';
 
 class GamesController {
   async index(req, res) {
@@ -8,6 +9,18 @@ class GamesController {
       where: {
         championship_id: championshipId,
       },
+      include: [
+        {
+          model: Team,
+          as: 'first_team',
+          attributes: ['name', 'id'],
+        },
+        {
+          model: Team,
+          as: 'second_team',
+          attributes: ['name', 'id'],
+        },
+      ],
     });
 
     return res.json({ games });
@@ -22,9 +35,15 @@ class GamesController {
       return res.status(401).json({ message: 'The game is alreandy complete' });
     }
 
-    await gameToUpdate.update({ complete: true });
+    await gameToUpdate.update({
+      first_team_goals: firstTeamGoals,
+      second_team_goals: secondTeamGoals,
+      complete: true,
+    });
 
-    const updateRanking = this.setNewRanking(
+    const gamesController = new GamesController();
+
+    const updateRanking = gamesController.setNewRanking(
       gameToUpdate,
       firstTeamGoals,
       secondTeamGoals
@@ -44,28 +63,33 @@ class GamesController {
     let pointsToOrdenate;
 
     if (firstTeamGoals > secondTeamGoals) {
-      ranking.map(async item => {
+      ranking.map(item => {
         if (item.team_id === game.first_team_id) {
           const newPoints = item.points + 3;
-          await item.update({ points: newPoints });
+          Ranking.update(
+            { points: newPoints },
+            {
+              where: { team_id: item.team_id },
+            }
+          );
         }
         pointsToOrdenate.push(item.points);
       });
     } else if (firstTeamGoals === secondTeamGoals) {
-      ranking.map(async item => {
+      ranking.map(item => {
         if (
           item.team_id === game.first_team_id ||
           item.team_id === game.second_team_id
         ) {
           const newPoints = item.points + 1;
-          await item.update({ points: newPoints });
+          item.update({ points: newPoints });
         }
       });
     } else {
-      ranking.map(async item => {
+      ranking.map(item => {
         if (item.team_id === game.second_team_id) {
           const newPoints = item.points + 3;
-          await item.update({ points: newPoints });
+          item.update({ points: newPoints });
         }
       });
     }

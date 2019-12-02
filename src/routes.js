@@ -364,4 +364,249 @@ routes.post('/api/newChampionship', ChampionshipController.store);
 
 routes.get('/api/getAllChampionships', ChampionshipController.index);
 
+/**
+ * @api {get} /getAllGames Busca jogos pelo id do campeonato
+ * @apiGroup Championship
+ * @apiPermission authenticated user and must send "Bearer token"
+ * @apiParamExample {string} query param championshipId=5
+ * @apiSuccessExample {json} Sucesso
+ *    HTTP/1.1 200 OK
+ *    {
+ *       "games": [
+ *           {
+ *               "id": 37,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.834Z",
+ *               "updatedAt": "2019-12-02T17:14:49.834Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 1,
+ *               "second_team_id": 2,
+ *               "first_team": {
+ *                   "name": "Flamengo",
+ *                   "id": 1
+ *               },
+ *               "second_team": {
+ *                   "name": "Sao Paulo",
+ *                   "id": 2
+ *               }
+ *           },
+ *           {
+ *               "id": 38,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.835Z",
+ *               "updatedAt": "2019-12-02T17:14:49.835Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 1,
+ *               "second_team_id": 3,
+ *               "first_team": {
+ *                   "name": "Flamengo",
+ *                   "id": 1
+ *               },
+ *               "second_team": {
+ *                   "name": "Corinthians",
+ *                   "id": 3
+ *               }
+ *           },
+ *           {
+ *               "id": 39,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.835Z",
+ *               "updatedAt": "2019-12-02T17:14:49.835Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 1,
+ *               "second_team_id": 4,
+ *               "first_team": {
+ *                   "name": "Flamengo",
+ *                   "id": 1
+ *               },
+ *               "second_team": {
+ *                   "name": "Santos",
+ *                   "id": 4
+ *               }
+ *           },
+ *           {
+ *               "id": 40,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.837Z",
+ *               "updatedAt": "2019-12-02T17:14:49.837Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 2,
+ *               "second_team_id": 1,
+ *               "first_team": {
+ *                   "name": "Sao Paulo",
+ *                   "id": 2
+ *               },
+ *               "second_team": {
+ *                   "name": "Flamengo",
+ *                   "id": 1
+ *               }
+ *           },
+ *           {
+ *               "id": 41,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.838Z",
+ *               "updatedAt": "2019-12-02T17:14:49.838Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 2,
+ *               "second_team_id": 3,
+ *               "first_team": {
+ *                   "name": "Sao Paulo",
+ *                   "id": 2
+ *               },
+ *               "second_team": {
+ *                   "name": "Corinthians",
+ *                   "id": 3
+ *               }
+ *           },
+ *           {
+ *               "id": 42,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.839Z",
+ *               "updatedAt": "2019-12-02T17:14:49.839Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 2,
+ *               "second_team_id": 4,
+ *               "first_team": {
+ *                   "name": "Sao Paulo",
+ *                   "id": 2
+ *               },
+ *               "second_team": {
+ *                   "name": "Santos",
+ *                   "id": 4
+ *               }
+ *           },
+ *           {
+ *               "id": 43,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.839Z",
+ *               "updatedAt": "2019-12-02T17:14:49.839Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 3,
+ *               "second_team_id": 1,
+ *               "first_team": {
+ *                   "name": "Corinthians",
+ *                   "id": 3
+ *               },
+ *               "second_team": {
+ *                   "name": "Flamengo",
+ *                   "id": 1
+ *               }
+ *           },
+ *           {
+ *               "id": 44,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.840Z",
+ *               "updatedAt": "2019-12-02T17:14:49.840Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 3,
+ *               "second_team_id": 2,
+ *               "first_team": {
+ *                   "name": "Corinthians",
+ *                   "id": 3
+ *               },
+ *               "second_team": {
+ *                   "name": "Sao Paulo",
+ *                   "id": 2
+ *               }
+ *           },
+ *           {
+ *               "id": 45,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.840Z",
+ *               "updatedAt": "2019-12-02T17:14:49.840Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 3,
+ *               "second_team_id": 4,
+ *               "first_team": {
+ *                   "name": "Corinthians",
+ *                   "id": 3
+ *               },
+ *               "second_team": {
+ *                   "name": "Santos",
+ *                   "id": 4
+ *               }
+ *           },
+ *           {
+ *               "id": 46,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.841Z",
+ *               "updatedAt": "2019-12-02T17:14:49.841Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 4,
+ *               "second_team_id": 1,
+ *               "first_team": {
+ *                   "name": "Santos",
+ *                   "id": 4
+ *               },
+ *               "second_team": {
+ *                   "name": "Flamengo",
+ *                   "id": 1
+ *               }
+ *           },
+ *           {
+ *               "id": 47,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.842Z",
+ *               "updatedAt": "2019-12-02T17:14:49.842Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 4,
+ *               "second_team_id": 2,
+ *               "first_team": {
+ *                   "name": "Santos",
+ *                   "id": 4
+ *               },
+ *               "second_team": {
+ *                   "name": "Sao Paulo",
+ *                   "id": 2
+ *               }
+ *           },
+ *           {
+ *               "id": 48,
+ *               "first_team_goals": 0,
+ *               "second_team_goals": 0,
+ *               "complete": false,
+ *               "createdAt": "2019-12-02T17:14:49.842Z",
+ *               "updatedAt": "2019-12-02T17:14:49.842Z",
+ *               "championship_id": 5,
+ *               "first_team_id": 4,
+ *               "second_team_id": 3,
+ *               "first_team": {
+ *                   "name": "Santos",
+ *                   "id": 4
+ *               },
+ *               "second_team": {
+ *                   "name": "Corinthians",
+ *                   "id": 3
+ *               }
+ *           }
+ *       ]
+ *     }
+ */
+
+routes.get('/api/getAllGames', GamesController.index);
+
+routes.put('/api/updateGame', GamesController.update);
+
 export default routes;
