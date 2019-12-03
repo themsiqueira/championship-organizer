@@ -73,8 +73,11 @@ Abaixo temos alguns comandos úteis para debug, execução e executar testes.
 
 # Extras
 
-  A Documentação foi criada com apidoc e se encontra na pasta public/apidoc,
+  A Documentação foi criada com apidoc e se encontra na pasta `public/apidoc`,
   para visualizar abrir o arquivo index.html desta pasta no navegador.
+
+  O coverage de testes que foi gerado durante o desenvolvimento esta na pasta `__tests__/coverage`,
+  é possivel visualiza-lo abrindo o index.html no navegador.
 
   Também está no projeto as requisições para postman e insominia, você pode encontra-las
   na pasta collections, para usar é so importar as mesmas nos apps.
