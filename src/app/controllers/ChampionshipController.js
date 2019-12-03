@@ -112,17 +112,17 @@ class ChampionshipController {
 
     const alphabeticalOrder = names.sort();
 
-    let classification = 1;
+    let classification = 0;
     alphabeticalOrder.map(name => {
       teamsWithAllData.map(team => {
         if (team.name === name) {
+          classification += 1;
           const rank = {
             team_id: team.id,
             championship_id: championshipId,
             position: classification,
           };
           Raking.create(rank);
-          classification += 1;
           ranks.push(rank);
         }
       });

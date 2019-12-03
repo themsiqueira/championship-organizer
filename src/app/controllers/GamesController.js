@@ -156,14 +156,38 @@ class GamesController {
       ],
     });
 
-    const result = ranking.sort(function compararNumeros(a, b) {
-      return a.points - b.points;
+    ranking.sort((x, y) => {
+      if (x.points > y.points) {
+        return -1;
+      }
+      if (x.points < y.points) {
+        return 1;
+      }
+      if (x.victories > y.victories) {
+        return -1;
+      }
+      if (x.victories < y.victories) {
+        return 1;
+      }
+      if (x.goals > y.goals) {
+        return -1;
+      }
+      if (x.goals < y.goals) {
+        return 1;
+      }
+      if (x.team.name > y.team.name) {
+        return -1;
+      }
+      if (x.team.name < y.team.name) {
+        return 1;
+      }
+      return 0;
     });
 
-    let newRank = 1;
-    const promisse = result.forEach(async item => {
-      await Ranking.update({ position: newRank }, { where: { id: item.id } });
+    let newRank = 0;
+    const promisse = ranking.forEach(async item => {
       newRank += 1;
+      await Ranking.update({ position: newRank }, { where: { id: item.id } });
     });
 
     await Promise.all(promisse);
