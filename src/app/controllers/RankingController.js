@@ -11,7 +11,7 @@ class RankingController {
       include: [
         {
           model: Team,
-          as: 'teams',
+          as: 'team',
           attributes: ['name', 'id'],
         },
       ],

@@ -342,7 +342,7 @@ routes.delete('/api/deleteTeam', TeamController.delete);
 routes.post('/api/newChampionship', ChampionshipController.store);
 
 /**
- * @api {get} /getAllChampionships Atualiza nome do time
+ * @api {get} /getAllChampionships Busca todos o campeonatos
  * @apiGroup Teams
  * @apiPermission authenticated user and must send "Bearer token"
  * @apiSuccessExample {json} Sucesso
@@ -607,6 +607,106 @@ routes.get('/api/getAllChampionships', ChampionshipController.index);
 
 routes.get('/api/getAllGames', GamesController.index);
 
+/**
+ * @api {put} /updateGame Atualiza status do jogo e o ranking
+ * @apiGroup Championship
+ * @apiParamExample {json} Request-Example:
+ *
+ *    {
+ *       "gameId": 37,
+ *       "firstTeamGoals": 3,
+ *       "secondTeamGoals": 0,
+ *       "firstTeamProGoals": 3,
+ *       "secondTeamProGoals": 0
+ *     }
+ *
+ * @apiSuccessExample {json} Sucesso
+ *    HTTP/1.1 200 OK
+ *    {
+ *       "message": "Sucess to update Game and ranking"
+ *    }
+ */
+
 routes.put('/api/updateGame', GamesController.update);
+
+/**
+ * @api {get} /getRaking Busca ranking por Id do campeonato
+ * @apiGroup Teams
+ * @apiPermission authenticated user and must send "Bearer token"
+ * @apiParamExample {string} query paraam championshipId=5
+ * @apiSuccessExample {json} Sucesso
+ *    HTTP/1.1 200 OK
+ *    {
+ *       "message": "Sucess to find ranking",
+ *       "ranking": [
+ *         {
+ *            "id": 2,
+ *            "victories": 9,
+ *            "position": 1,
+ *            "points": 3,
+ *            "goals": 3,
+ *            "pro_goals": 3,
+ *            "createdAt": "2019-12-02T17:14:53.342Z",
+ *            "updatedAt": "2019-12-03T12:40:58.584Z",
+ *            "championship_id": 5,
+ *            "team_id": 1,
+ *            "team": {
+ *              "name": "Flamengo",
+ *              "id": 1
+ *            }
+ *         },
+ *         {
+ *            "id": 4,
+ *            "victories": 0,
+ *            "position": 2,
+ *            "points": 0,
+ *            "goals": 0,
+ *            "pro_goals": 0,
+ *            "createdAt": "2019-12-02T17:14:53.343Z",
+ *            "updatedAt": "2019-12-03T12:40:58.586Z",
+ *            "championship_id": 5,
+ *            "team_id": 2,
+ *            "team": {
+ *              "name": "Sao Paulo",
+ *              "id": 2
+ *            }
+ *         },
+ *         {
+ *            "id": 1,
+ *            "victories": 0,
+ *            "position": 4,
+ *            "points": 0,
+ *            "goals": 0,
+ *            "pro_goals": 0,
+ *            "createdAt": "2019-12-02T17:14:53.339Z",
+ *            "updatedAt": "2019-12-03T12:40:58.587Z",
+ *            "championship_id": 5,
+ *            "team_id": 3,
+ *            "team": {
+ *               "name": "Corinthians",
+ *               "id": 3
+ *            }
+ *         },
+ *         {
+ *           "id": 3,
+ *           "victories": 0,
+ *           "position": 3,
+ *           "points": 0,
+ *           "goals": 0,
+ *           "pro_goals": 0,
+ *           "createdAt": "2019-12-02T17:14:53.342Z",
+ *           "updatedAt": "2019-12-03T12:40:58.586Z",
+ *           "championship_id": 5,
+ *           "team_id": 4,
+ *           "team": {
+ *             "name": "Santos",
+ *             "id": 4
+ *           }
+ *         }
+ *       ]
+ *     }
+ */
+
+routes.get('/api/getRanking', RankingController.index);
 
 export default routes;

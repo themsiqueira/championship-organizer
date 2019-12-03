@@ -4,7 +4,7 @@ class TeamController {
   async store(req, res) {
     const { teams } = req.body;
 
-    let result = [];
+    const result = [];
 
     const promises = teams.map(async team => {
       const teamExists = await Team.findOne({ where: { name: team.name } });
@@ -22,7 +22,7 @@ class TeamController {
   async index(req, res) {
     const teams = await Team.findAll({ where: { user_id: req.userId } });
 
-    if(!teams) {
+    if (!teams) {
       return res.json({ message: 'Nothing was found' });
     }
 
@@ -33,11 +33,11 @@ class TeamController {
     const { name } = req.query;
     const team = await Team.findOne({ where: { name, user_id: req.userId } });
 
-    if(!team) {
+    if (!team) {
       return res.json({ message: 'Team not fount' });
     }
 
-    return res.json({ message: "Sucess to find team", team });
+    return res.json({ message: 'Sucess to find team', team });
   }
 
   async update(req, res) {
@@ -53,7 +53,7 @@ class TeamController {
       }
       const team = await teamToUpdate.update({ name: newName });
 
-      return res.json({ message: "Sucess to update team", team });
+      return res.json({ message: 'Sucess to update team', team });
     }
 
     return res.status(400).json({ error: 'Team does not exists' });
