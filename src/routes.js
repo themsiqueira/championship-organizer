@@ -14,6 +14,22 @@ import {
   validationUpdateUserMiddleware,
 } from './app/middlewares/validateUser';
 
+import {
+  validationStoreTeamMiddleware,
+  validationGetTeamByNameMiddleware,
+  validationUpdateTeamMiddleware,
+  validationDeleteTeamMiddleware,
+} from './app/middlewares/validateTeam';
+
+import { validationStoreChampionshipMiddleware } from './app/middlewares/validateChampionship';
+
+import {
+  validationUpdateGamesMiddleware,
+  validationGetGamesByChampionshipMiddleware,
+} from './app/middlewares/validateGames';
+
+import { validationGetRankingMiddleware } from './app/middlewares/validateRanking';
+
 const routes = new Router();
 
 /**
@@ -76,6 +92,17 @@ routes.use(authMiddleware);
  * @api {put} /updateUser Atualização de usuário
  * @apiGroup User
  * @apiPermission authenticated user and must send "Bearer token"
+ * @apiDescription Os Parametros de password são opcionais, envie somente caso queira alterar a senha
+ * @apiParamExample {json} Request-Example:
+ *
+ *    {
+ *      "name": "Joao Souza",
+ *      "email": "JoaoSouza@gmail.com",
+ *      "oldPassword": "senhaProvisoria",
+ *      "password": "novaSenhaProvisoria",
+ *      "confirmPassword": "novaSenhaProvisoria"
+ *    }
+ *
  * @apiSuccessExample {json} Sucesso
  *    HTTP/1.1 200 OK
  *    {
@@ -131,7 +158,11 @@ routes.put(
  *     }
  */
 
-routes.post('/api/newTeam', TeamController.store);
+routes.post(
+  '/api/newTeam',
+  validationStoreTeamMiddleware,
+  TeamController.store
+);
 
 /**
  * @api {get} /getAllTeams Busca times criados pelo usuário
@@ -163,7 +194,7 @@ routes.post('/api/newTeam', TeamController.store);
 routes.get('/api/getAllTeams', TeamController.index);
 
 /**
- * @api {get} /getAllTeams Busca time por nome
+ * @api {get} /getTeamByName Busca time por nome
  * @apiGroup Teams
  * @apiPermission authenticated user and must send "Bearer token"
  * @apiParam {String} name Query param
@@ -181,7 +212,11 @@ routes.get('/api/getAllTeams', TeamController.index);
  *    }
  */
 
-routes.get('/api/getTeamByName', TeamController.indexByName);
+routes.get(
+  '/api/getTeamByName',
+  validationGetTeamByNameMiddleware,
+  TeamController.indexByName
+);
 
 /**
  * @api {put} /updateTeam Atualiza nome do time
@@ -208,7 +243,11 @@ routes.get('/api/getTeamByName', TeamController.indexByName);
  *    }
  */
 
-routes.put('/api/updateTeam', TeamController.update);
+routes.put(
+  '/api/updateTeam',
+  validationUpdateTeamMiddleware,
+  TeamController.update
+);
 
 /**
  * @api {delete} /deleteTeam Deleta o time por ID
@@ -227,7 +266,11 @@ routes.put('/api/updateTeam', TeamController.update);
  *    }
  */
 
-routes.delete('/api/deleteTeam', TeamController.delete);
+routes.delete(
+  '/api/deleteTeam',
+  validationDeleteTeamMiddleware,
+  TeamController.delete
+);
 
 /**
  * @api {post} /newChampionship Create a championship
@@ -279,7 +322,11 @@ routes.delete('/api/deleteTeam', TeamController.delete);
  *     }
  */
 
-routes.post('/api/newChampionship', ChampionshipController.store);
+routes.post(
+  '/api/newChampionship',
+  validationStoreChampionshipMiddleware,
+  ChampionshipController.store
+);
 
 /**
  * @api {get} /getAllChampionships Busca todos o campeonatos
@@ -355,7 +402,11 @@ routes.get('/api/getAllChampionships', ChampionshipController.index);
  *     }
  */
 
-routes.get('/api/getAllGames', GamesController.index);
+routes.get(
+  '/api/getAllGames',
+  validationGetGamesByChampionshipMiddleware,
+  GamesController.index
+);
 
 /**
  * @api {put} /updateGame Atualiza status do jogo e o ranking
@@ -377,7 +428,11 @@ routes.get('/api/getAllGames', GamesController.index);
  *    }
  */
 
-routes.put('/api/updateGame', GamesController.update);
+routes.put(
+  '/api/updateGame',
+  validationUpdateGamesMiddleware,
+  GamesController.update
+);
 
 /**
  * @api {get} /getRanking Busca ranking por Id do campeonato
@@ -425,6 +480,10 @@ routes.put('/api/updateGame', GamesController.update);
  *     }
  */
 
-routes.get('/api/getRanking', RankingController.index);
+routes.get(
+  '/api/getRanking',
+  validationGetRankingMiddleware,
+  RankingController.index
+);
 
 export default routes;

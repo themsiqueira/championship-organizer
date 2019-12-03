@@ -45,6 +45,8 @@ Instale as dependências do projeto:
 
 Antes de iniciar o projeto rode as migrations para modelar o banco:
 
+  > Obs: Ip padrão do docker configurado no .env, caso em sua maquina seja outro será necessário alterar no .env.
+
   `yarn migrate`
 
   Obs: Caso queira desfazer a modelagem utilize o comando abaixo.
@@ -82,3 +84,501 @@ Abaixo temos alguns comandos úteis para debug, execução e executar testes.
   `http://localhost:3333/api`
 
 > Obs: a porta pode ser configurada no arquivo server.js, ao mudar a porta também é necessário mudar o script de debug
+
+#### Criação de usuário:
+
+Tipo: POST
+
+Endpoint:
+`/newUser`
+
+Body:
+
+```
+  {
+    "name": "Joao",
+    "email": "Joao@gmail.com",
+    "password": "senhaProvisoria"
+  }
+```
+
+Retorno:
+
+```
+  {
+    "id": "1",
+    "name": "Joao"
+    "email": "Joao@gmail.com"
+  }
+```
+
+#### Login de usuário (Auth):
+
+Tipo: POST
+Endpoint:
+`/login`
+
+Body:
+
+```
+  {
+    "email": "Joao@gmail.com",
+    "password": "senhaProvisoria"
+  }
+```
+
+Retorno:
+
+```
+  {
+   "user": {
+     "id": "1",
+     "name": "Joao"
+     "email": "Joao@gmail.com"
+   },
+   "token": "token jwt gerado"
+  }
+
+```
+
+#### Atualização de usuário:
+
+Tipo: PUT
+Segurança: Token Jwt que é retornado na autenticação
+Endpoint:
+`/updateUser`
+
+  >Obs: os parametros name e email são obrigatorios
+
+Body:
+
+```
+  {
+    "name": "Joao Souza",
+    "email": "JoaoSouza@gmail.com",
+    "oldPassword": "senhaProvisoria",
+    "password": "novaSenhaProvisoria",
+    "confirmPassword": "novaSenhaProvisoria"
+  }
+```
+
+Retorno:
+
+```
+{
+  "id": "1",
+  "name": "Joao Souza"
+  "email": "JoaoSouza@gmail.com"
+}
+
+```
+
+#### Novo Time:
+
+Tipo: POST
+Segurança: Token Jwt que é retornado na autenticação
+Endpoint:
+`/newTeam`
+
+  >Obs: se pode criar N times ao mesmo tempo, caso algum dos times ja exista ele não é cadastrado
+
+Body:
+
+```
+  {
+    "teams": [
+      {
+        "name": "Flamengo",
+      },
+      {
+        "name": "Sao Paulo"
+      }
+    ]
+  }
+```
+
+Retorno:
+
+```
+  {
+    "message": "Sucess create new record",
+    "result": [
+                {
+                  "id": 2,
+                  "name": "Flamengo",
+                  "user_id": 1,
+                  "updatedAt": "2019-12-02T13:37:17.205Z",
+                  "createdAt": "2019-12-02T13:37:17.205Z"
+                },
+                {
+                  "id": 1,
+                  "name": "Sao Paulo",
+                  "user_id": 1,
+                  "updatedAt": "2019-12-02T13:37:17.204Z",
+                  "createdAt": "2019-12-02T13:37:17.204Z"
+                }
+              ]
+  }
+
+```
+
+#### Busca times:
+
+Tipo: GET
+Segurança: Token Jwt que é retornado na autenticação
+Endpoint:
+`/getAllTeams`
+
+  >Obs: busca todos os times vinculados ao seu perfil
+
+Retorno:
+
+```
+  {
+    "message": "Sucess to find teams",
+    "result": [
+                {
+                  "id": 2,
+                  "name": "Flamengo",
+                  "user_id": 1,
+                  "updatedAt": "2019-12-02T13:37:17.205Z",
+                  "createdAt": "2019-12-02T13:37:17.205Z"
+                },
+                {
+                  "id": 1,
+                  "name": "Sao Paulo",
+                  "user_id": 1,
+                  "updatedAt": "2019-12-02T13:37:17.204Z",
+                  "createdAt": "2019-12-02T13:37:17.204Z"
+                }
+              ]
+  }
+
+```
+
+#### Busca time por nome:
+
+Tipo: GET
+Segurança: Token Jwt que é retornado na autenticação
+Endpoint:
+`/getAllTeams`
+
+  >Obs: Parametro deve ser enviado via query param na URL
+  >Obs_2: busca time por nome, porem somente vinculados ao seu perfil
+
+Query:
+
+```
+  { name: "Flamengo"}
+```
+
+Retorno:
+
+```
+  {
+    "message": "Sucess to find team",
+    "team": {
+              "id": 2,
+              "name": "Flamengo",
+              "user_id": 1,
+              "updatedAt": "2019-12-02T13:37:17.205Z",
+              "createdAt": "2019-12-02T13:37:17.205Z"
+            }
+  }
+
+```
+
+#### Update de time:
+
+Tipo: PUT
+Segurança: Token Jwt que é retornado na autenticação
+Endpoint:
+`/updateTeam`
+
+  >Obs: Somente atualiza times vinculados ao seu perfil
+
+Body:
+
+```
+  {
+    "id": 1,
+    "newName": "Tricolor"
+  }
+```
+
+Retorno:
+
+```
+  {
+    "message": "Sucess to update team",
+    "team": {
+              "id": 1,
+              "name": "Tricolor",
+              "user_id": 1,
+              "updatedAt": "2019-12-02T13:37:17.205Z",
+              "createdAt": "2019-12-02T13:37:17.205Z"
+            }
+  }
+
+```
+
+#### Exclusão de time:
+
+Tipo: PUT
+Segurança: Token Jwt que é retornado na autenticação
+Endpoint:
+`/updateTeam`
+
+  >Obs: Somente exclui times vinculados ao seu perfil
+
+Body:
+
+```
+  {
+    "id": 1,
+  }
+```
+
+Retorno:
+
+```
+  {
+    "message": "Sucess to delete team",
+  }
+
+```
+
+#### Cria Campeonato:
+
+Tipo: POST
+Segurança: Token Jwt que é retornado na autenticação
+Endpoint:
+`/newChampionship`
+
+  >Obs: Somente usa times vinculados ao seu perfil.
+  >Obs_2: Devem ser enviados no minimo 'ids de quatro times.
+
+Body:
+
+```
+  {
+    "title": "Campeonato Brasileiro Serie A"
+    "teams": [1, 2, 3, 4],
+  }
+```
+
+Retorno:
+
+```
+  {
+    "message": "Sucess to create championship",
+    "championship": {
+        "id": 5,
+        "title": "Campeonato Brasileiro",
+        "user_id": 1,
+        "updatedAt": "2019-12-02T17:14:49.772Z",
+        "createdAt": "2019-12-02T17:14:49.772Z",
+        "complete": false
+    },
+    "games": [
+        {
+            "championship_id": 5,
+            "first_team_id": 1,
+            "second_team_id": 2
+        },
+        {
+            "championship_id": 5,
+            "first_team_id": 1,
+            "second_team_id": 3
+        }
+    ],
+    "rankings": [
+        {
+            "team_id": 3,
+            "championship_id": 5,
+            "position": 1
+        },
+        {
+            "team_id": 1,
+            "championship_id": 5,
+            "position": 2
+        }
+    ]
+  }
+
+```
+
+#### Busca de Campeonatos:
+
+Tipo: GET
+Segurança: Token Jwt que é retornado na autenticação
+Endpoint:
+`/getAllChampionships`
+
+Retorno:
+
+```
+  {
+    "message": "Sucess to find championships",
+    "championships": [
+      {
+        "id": 5,
+        "title": "Campeonato Brasileiro",
+        "complete": false,
+        "createdAt": "2019-12-02T17:14:49.772Z",
+        "updatedAt": "2019-12-02T17:14:49.772Z",
+        "user_id": 1
+      }
+    ]
+  }
+
+```
+
+#### Busca jogos pelo id do campeonato:
+
+Tipo: GET
+Segurança: Token Jwt que é retornado na autenticação
+Endpoint:
+`/getAllGames`
+
+  >Obs: Parametro deve ser enviado via query param na URL
+
+Query:
+
+```
+  { championshipId: 5}
+```
+
+Retorno:
+
+```
+  {
+    "games": [
+        {
+            "id": 37,
+            "first_team_goals": 0,
+            "second_team_goals": 0,
+            "complete": false,
+            "createdAt": "2019-12-02T17:14:49.834Z",
+            "updatedAt": "2019-12-02T17:14:49.834Z",
+            "championship_id": 5,
+            "first_team_id": 1,
+            "second_team_id": 2,
+            "first_team": {
+                "name": "Flamengo",
+                "id": 1
+            },
+            "second_team": {
+                "name": "Sao Paulo",
+                "id": 2
+            }
+        },
+        {
+            "id": 38,
+            "first_team_goals": 0,
+            "second_team_goals": 0,
+            "complete": false,
+            "createdAt": "2019-12-02T17:14:49.835Z",
+            "updatedAt": "2019-12-02T17:14:49.835Z",
+            "championship_id": 5,
+            "first_team_id": 1,
+            "second_team_id": 3,
+            "first_team": {
+                "name": "Flamengo",
+                "id": 1
+            },
+            "second_team": {
+                "name": "Corinthians",
+                "id": 3
+            }
+        }
+    ]
+  }
+
+```
+
+#### Atualiza status do jogo e o ranking:
+
+Tipo: PUT
+Segurança: Token Jwt que é retornado na autenticação
+Endpoint:
+`/updateGame`
+
+Body:
+
+```
+  {
+    "gameId": 37,
+    "firstTeamGoals": 3,
+    "secondTeamGoals": 0,
+    "firstTeamProGoals": 3,
+    "secondTeamProGoals": 0
+  }
+```
+
+Retorno:
+
+```
+  {
+    "message": "Sucess to update Game and ranking"
+  }
+
+```
+
+#### Busca ranking por Id do campeonato:
+
+Tipo: GET
+Segurança: Token Jwt que é retornado na autenticação
+Endpoint:
+`/getRanking`
+
+  >Obs: Parametro deve ser enviado via query param na URL
+
+Query:
+
+```
+  { championshipId: 5}
+```
+
+Retorno:
+
+```
+  {
+    "message": "Sucess to find ranking",
+    "ranking": [
+      {
+        "id": 2,
+        "victories": 9,
+        "position": 1,
+        "points": 3,
+        "goals": 3,
+        "pro_goals": 3,
+        "createdAt": "2019-12-02T17:14:53.342Z",
+        "updatedAt": "2019-12-03T12:40:58.584Z",
+        "championship_id": 5,
+        "team_id": 1,
+        "team": {
+          "name": "Flamengo",
+          "id": 1
+        }
+      },
+      {
+        "id": 4,
+        "victories": 0,
+        "position": 2,
+        "points": 0,
+        "goals": 0,
+        "pro_goals": 0,
+        "createdAt": "2019-12-02T17:14:53.343Z",
+        "updatedAt": "2019-12-03T12:40:58.586Z",
+        "championship_id": 5,
+        "team_id": 2,
+        "team": {
+          "name": "Sao Paulo",
+          "id": 2
+        }
+      }
+    ]
+  }
+
+```
