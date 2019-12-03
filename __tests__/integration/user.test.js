@@ -6,9 +6,9 @@ describe('User', () => {
     const response = await request(app)
       .post('/api/newUser')
       .send({
-        name: 'Nome para teste',
-        email: 'nomeparateste@gmail.com',
-        password: 'senhateste@2019',
+        name: 'Joao',
+        email: 'Joao@gmail.com',
+        password: 'senhaProvisoria',
       });
 
     expect(response.body).toHaveProperty('id');
@@ -18,17 +18,17 @@ describe('User', () => {
     await request(app)
       .post('/api/newUser')
       .send({
-        name: 'Não deve criar duas vezes',
-        email: 'naodevecriarduasvezes@gmail.com',
-        password: 'senhateste@2019',
+        name: 'Mateus',
+        email: 'mateus@gmail.com',
+        password: 'senhaProvisoria',
       });
 
     const response = await request(app)
       .post('/api/newUser')
       .send({
-        name: 'Não deve criar duas vezes',
-        email: 'naodevecriarduasvezes@gmail.com',
-        password: 'senhateste@2019',
+        name: 'Mateus',
+        email: 'Mateus@gmail.com',
+        password: 'senhaProvisoria',
       });
 
     expect(response.body).toHaveProperty('error');
@@ -38,17 +38,17 @@ describe('User', () => {
     const auth = await request(app)
       .post('/api/login')
       .send({
-        email: 'nomeparateste@gmail.com',
-        password: 'senhateste@2019',
+        email: 'Joao@gmail.com',
+        password: 'senhaProvisoria',
       })
       .expect(200);
 
     const response = await request(app)
       .put('/api/updateUser')
-      .set('Authorization', 'Bearer ' + auth.body.token)
+      .set('Authorization', `Bearer ${auth.body.token}`)
       .send({
-        name: 'Não deve criar duas vezes',
-        email: 'naodevecriarduasvezes@gmail.com',
+        name: 'Joao',
+        email: 'Mateus@gmail.com',
       })
       .expect(400);
 
@@ -59,20 +59,20 @@ describe('User', () => {
     const auth = await request(app)
       .post('/api/login')
       .send({
-        email: 'nomeparateste@gmail.com',
-        password: 'senhateste@2019',
+        email: 'Mateus@gmail.com',
+        password: 'senhaProvisoria',
       })
       .expect(200);
 
     const response = await request(app)
       .put('/api/updateUser')
-      .set('Authorization', 'Bearer ' + auth.body.token)
+      .set('Authorization', `Bearer ${auth.body.token}`)
       .send({
-        name: 'Não deve criar duas vezes',
-        email: 'nomeparateste@gmail.com',
-        oldPassword: 'senhateste@2018',
-        password: 'senhateste@2020',
-        confirmPassword: 'senhateste@2020',
+        name: 'Mateus',
+        email: 'Mateus@gmail.com',
+        oldPassword: 'senhaProvisoria@2019',
+        password: 'senhaDefinitiva',
+        confirmPassword: 'senhaDefinitiva',
       })
       .expect(401);
 
@@ -83,17 +83,17 @@ describe('User', () => {
     const auth = await request(app)
       .post('/api/login')
       .send({
-        email: 'nomeparateste@gmail.com',
-        password: 'senhateste@2019',
+        email: 'Joao@gmail.com',
+        password: 'senhaProvisoria',
       })
       .expect(200);
 
     const response = await request(app)
       .put('/api/updateUser')
-      .set('Authorization', 'Bearer ' + auth.body.token)
+      .set('Authorization', `Bearer ${auth.body.token}`)
       .send({
-        name: 'Não deve criar duas vezes atualizado',
-        email: 'nomeparatestenovo@gmail.com',
+        name: 'Joao Souza',
+        email: 'JoaoSouza@gmail.com',
       })
       .expect(200);
 
