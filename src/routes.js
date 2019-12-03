@@ -32,6 +32,8 @@ import { validationGetRankingMiddleware } from './app/middlewares/validateRankin
 
 const routes = new Router();
 
+// #region
+
 /**
  * @api {post} /login Login
  * @apiGroup User
@@ -54,11 +56,15 @@ const routes = new Router();
  *    }
  */
 
+// #endregion
+
 routes.post(
   '/api/login',
   validationStoreSessionMiddleware,
   SessionController.store
 );
+
+// #region
 
 /**
  * @api {post} /newUser Novo usuário
@@ -80,6 +86,8 @@ routes.post(
  *    }
  */
 
+// #endregion
+
 routes.post(
   '/api/newUser',
   validationStoreUserMiddleware,
@@ -87,6 +95,8 @@ routes.post(
 );
 
 routes.use(authMiddleware);
+
+// #region
 
 /**
  * @api {put} /updateUser Atualização de usuário
@@ -112,11 +122,15 @@ routes.use(authMiddleware);
  *    }
  */
 
+// #endregion
+
 routes.put(
   '/api/updateUser',
   validationUpdateUserMiddleware,
   UserController.update
 );
+
+// #region
 
 /**
  * @api {post} /newTeam Cria novo time
@@ -158,11 +172,15 @@ routes.put(
  *     }
  */
 
+// #endregion
+
 routes.post(
   '/api/newTeam',
   validationStoreTeamMiddleware,
   TeamController.store
 );
+
+// #region
 
 /**
  * @api {get} /getAllTeams Busca times criados pelo usuário
@@ -191,7 +209,11 @@ routes.post(
  *     }
  */
 
+// #endregion
+
 routes.get('/api/getAllTeams', TeamController.index);
+
+// #region
 
 /**
  * @api {get} /getTeamByName Busca time por nome
@@ -212,11 +234,15 @@ routes.get('/api/getAllTeams', TeamController.index);
  *    }
  */
 
+// #endregion
+
 routes.get(
   '/api/getTeamByName',
   validationGetTeamByNameMiddleware,
   TeamController.indexByName
 );
+
+// #region
 
 /**
  * @api {put} /updateTeam Atualiza nome do time
@@ -243,11 +269,15 @@ routes.get(
  *    }
  */
 
+// #endregion
+
 routes.put(
   '/api/updateTeam',
   validationUpdateTeamMiddleware,
   TeamController.update
 );
+
+// #region
 
 /**
  * @api {delete} /deleteTeam Deleta o time por ID
@@ -266,11 +296,15 @@ routes.put(
  *    }
  */
 
+// #endregion
+
 routes.delete(
   '/api/deleteTeam',
   validationDeleteTeamMiddleware,
   TeamController.delete
 );
+
+// #region
 
 /**
  * @api {post} /newChampionship Create a championship
@@ -322,11 +356,15 @@ routes.delete(
  *     }
  */
 
+// #endregion
+
 routes.post(
   '/api/newChampionship',
   validationStoreChampionshipMiddleware,
   ChampionshipController.store
 );
+
+// #region
 
 /**
  * @api {get} /getAllChampionships Busca todos o campeonatos
@@ -349,7 +387,11 @@ routes.post(
  *     }
  */
 
+// #endregion
+
 routes.get('/api/getAllChampionships', ChampionshipController.index);
+
+// #region
 
 /**
  * @api {get} /getAllGames Busca jogos pelo id do campeonato
@@ -402,11 +444,15 @@ routes.get('/api/getAllChampionships', ChampionshipController.index);
  *     }
  */
 
+// #endregion
+
 routes.get(
   '/api/getAllGames',
   validationGetGamesByChampionshipMiddleware,
   GamesController.index
 );
+
+// #region
 
 /**
  * @api {put} /updateGame Atualiza status do jogo e o ranking
@@ -428,11 +474,15 @@ routes.get(
  *    }
  */
 
+// #endregion
+
 routes.put(
   '/api/updateGame',
   validationUpdateGamesMiddleware,
   GamesController.update
 );
+
+// #region
 
 /**
  * @api {get} /getRanking Busca ranking por Id do campeonato
@@ -479,6 +529,8 @@ routes.put(
  *       ]
  *     }
  */
+
+// #endregion
 
 routes.get(
   '/api/getRanking',
