@@ -56,7 +56,7 @@ class TeamController {
       return res.json({ message: 'Sucess to update team', team });
     }
 
-    return res.status(400).json({ error: 'Team does not exists' });
+    return res.status(400).json({ message: 'Team does not exists' });
   }
 
   async delete(req, res) {

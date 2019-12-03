@@ -198,7 +198,7 @@ describe('Teams', () => {
       .send({
         teams: [
           {
-            name: 'Parana',
+            name: 'Angola',
           },
         ],
       })
@@ -234,18 +234,23 @@ describe('Teams', () => {
       })
       .expect(200);
 
-    const team = await request(app)
-      .get('/api/getTeamByName')
-      .query({ name: 'Parana' })
+    const teamCreated = await request(app)
+      .post('/api/newTeam')
       .set('Authorization', `Bearer ${auth.body.token}`)
-      .send()
+      .send({
+        teams: [
+          {
+            name: 'Brasilia',
+          },
+        ],
+      })
       .expect(200);
 
     const response = await request(app)
       .delete('/api/deleteTeam')
       .set('Authorization', `Bearer ${auth.body.token}`)
       .send({
-        id: team.body.id,
+        id: teamCreated.body.result[0].id,
       })
       .expect(200);
 
