@@ -5,7 +5,7 @@ export const validationGetRankingMiddleware = async (req, res, next) => {
     championshipId: Yup.number().required(),
   });
 
-  if (!(await schema.isValid(req.body))) {
+  if (!(await schema.isValid(req.query))) {
     return res.status(400).json({ error: 'Validation fails' });
   }
 

@@ -69,7 +69,7 @@ Abaixo temos alguns comandos úteis para debug, execução e executar testes.
 
   `yarn test` ou `npm run test`
 
-  >Obs: Para rodar os testes vocês deve alterar o arquivo .env apontando o panco para test
+  >Obs: Para rodar os testes vocês deve alterar o arquivo .env apontando o banco para test, caso nao encontre o banco de test, nem championship, será necessário criar no postgres
 
 # Extras
 
@@ -241,7 +241,7 @@ Retorno:
 ```
   {
     "message": "Sucess to find teams",
-    "result": [
+    "teams": [
                 {
                   "id": 2,
                   "name": "Flamengo",

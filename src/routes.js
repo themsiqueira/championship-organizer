@@ -190,7 +190,7 @@ routes.post(
  *    HTTP/1.1 200 OK
  *    {
  *      "message": "Sucess to find teams",
- *      "result": [
+ *      "teams": [
  *                  {
  *                    "id": 2,
  *                    "name": "Flamengo",

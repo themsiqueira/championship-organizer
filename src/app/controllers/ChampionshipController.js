@@ -27,7 +27,7 @@ class ChampionshipController {
     const championshipExists = await Championship.findOne({ where: { title } });
 
     if (championshipExists) {
-      return res.status(400).json({ error: 'Championship alreandy exists' });
+      return res.status(400).json({ message: 'Championship alreandy exists' });
     }
 
     const championship = await Championship.create({
