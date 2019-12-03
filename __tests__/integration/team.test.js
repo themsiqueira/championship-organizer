@@ -20,7 +20,7 @@ describe('Teams', () => {
       .expect(200);
 
     const response = await request(app)
-      .put('/api/newTeam')
+      .post('/api/newTeam')
       .set('Authorization', `Bearer ${auth.body.token}`)
       .send({
         teams: [
@@ -56,7 +56,7 @@ describe('Teams', () => {
       .expect(200);
 
     const response = await request(app)
-      .put('/api/newTeam')
+      .post('/api/newTeam')
       .set('Authorization', `Bearer ${auth.body.token}`)
       .send({
         teams: [
@@ -65,11 +65,9 @@ describe('Teams', () => {
           },
         ],
       })
-      .expect(400);
+      .expect(200);
 
-    expect(response.body).toEqual({
-      message: 'The teams Flamengo alreandy exists',
-    });
+    expect(response.body).toHaveProperty('message');
   });
 
   it('should not update team from another user', async () => {
@@ -90,7 +88,7 @@ describe('Teams', () => {
       .expect(200);
 
     const teamCreated = await request(app)
-      .put('/api/newTeam')
+      .post('/api/newTeam')
       .set('Authorization', `Bearer ${authJesus.body.token}`)
       .send({
         teams: [
@@ -113,7 +111,7 @@ describe('Teams', () => {
       .put('/api/updateTeam')
       .set('Authorization', `Bearer ${auth.body.token}`)
       .send({
-        id: teamCreated.team.id,
+        id: teamCreated.body.result[0].id,
         newName: 'Tricolor',
       })
       .expect(401);
@@ -133,18 +131,23 @@ describe('Teams', () => {
       .expect(200);
 
     const team = await request(app)
-      .get('/api/getTeamByName')
-      .query({ name: 'Parana' })
+      .post('/api/newTeam')
       .set('Authorization', `Bearer ${auth.body.token}`)
-      .send()
+      .send({
+        teams: [
+          {
+            name: 'Bahia',
+          },
+        ],
+      })
       .expect(200);
 
     const response = await request(app)
       .put('/api/updateTeam')
       .set('Authorization', `Bearer ${auth.body.token}`)
       .send({
-        id: team.id,
-        newName: 'Parana Atualizado',
+        id: team.body.result[0].id,
+        newName: 'Bahia Atualizado',
       })
       .expect(200);
 
@@ -167,7 +170,7 @@ describe('Teams', () => {
         id: 130,
         newName: 'Parana Atualizado',
       })
-      .expect(200);
+      .expect(400);
 
     expect(response.body).toEqual({ message: 'Team does not exists' });
   });
@@ -190,7 +193,7 @@ describe('Teams', () => {
       .expect(200);
 
     const teamCreated = await request(app)
-      .put('/api/newTeam')
+      .post('/api/newTeam')
       .set('Authorization', `Bearer ${authJesus.body.token}`)
       .send({
         teams: [
@@ -210,10 +213,10 @@ describe('Teams', () => {
       .expect(200);
 
     const response = await request(app)
-      .put('/api/deleteTeam')
+      .delete('/api/deleteTeam')
       .set('Authorization', `Bearer ${auth.body.token}`)
       .send({
-        id: teamCreated.team.id,
+        id: teamCreated.body.result[0].id,
       })
       .expect(401);
 
@@ -239,13 +242,13 @@ describe('Teams', () => {
       .expect(200);
 
     const response = await request(app)
-      .put('/api/deleteTeam')
+      .delete('/api/deleteTeam')
       .set('Authorization', `Bearer ${auth.body.token}`)
       .send({
-        id: team.id,
+        id: team.body.id,
       })
       .expect(200);
 
-    expect(response.body).toHaveProperty('team');
+    expect(response.body).toEqual({ message: 'Sucess to delete team' });
   });
 });

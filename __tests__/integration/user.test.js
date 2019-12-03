@@ -19,7 +19,7 @@ describe('User', () => {
       .post('/api/newUser')
       .send({
         name: 'Mateus',
-        email: 'mateus@gmail.com',
+        email: 'Mateus@gmail.com',
         password: 'senhaProvisoria',
       });
 

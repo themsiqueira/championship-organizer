@@ -69,6 +69,8 @@ Abaixo temos alguns comandos úteis para debug, execução e executar testes.
 
   `yarn test` ou `npm run test`
 
+  >Obs: Para rodar os testes vocês deve alterar o arquivo .env apontando o panco para test
+
 # Extras
 
   A Documentação foi criada com apidoc e se encontra na pasta public/apidoc,
