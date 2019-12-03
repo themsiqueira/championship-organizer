@@ -1,6 +1,7 @@
 import Games from '../models/Games';
 import Ranking from '../models/Ranking';
 import Team from '../models/Team';
+import Championship from '../models/Championship';
 
 class GamesController {
   async index(req, res) {
@@ -69,6 +70,10 @@ class GamesController {
       return res.status(500).json({ message: 'Error to update ranking' });
     }
 
+    await gamesController.checkGamesAndUpdateChampionship(
+      gameToUpdate.championship_id
+    );
+
     return res.json({ message: 'Sucess to update Game and ranking' });
   }
 
@@ -91,6 +96,9 @@ class GamesController {
       },
     });
 
+    let firstTeam;
+    let secondTeam;
+
     const newFirstTeamProGoals = firstTeamProGoals + firstTeamRank.pro_goals;
     const newFirstTeamGoals = firstTeamGoals + firstTeamRank.goals;
     const newSecondTeamGoals = secondTeamProGoals + secondTeamRank.goals;
@@ -100,34 +108,34 @@ class GamesController {
       const points = firstTeamRank.points + 3;
       const victories = firstTeamRank.victories + 1;
 
-      await firstTeamRank.update({
+      firstTeam = await firstTeamRank.update({
         points,
         victories,
         pro_goals: newFirstTeamProGoals,
         goals: newFirstTeamGoals,
       });
 
-      await secondTeamRank.update({
+      secondTeam = await secondTeamRank.update({
         pro_goals: newSecondTeamGoals,
         goals: newSecondTeamProGoals,
       });
     } else if (firstTeamGoals < secondTeamGoals) {
       const points = secondTeamRank.points + 3;
       const victories = secondTeamRank.victories + 1;
-      await secondTeamRank.update({
+      secondTeam = await secondTeamRank.update({
         points,
         victories,
         pro_goals: secondTeamRank.points,
         goals: newSecondTeamProGoals,
       });
 
-      await firstTeamRank.update({
+      firstTeam = await firstTeamRank.update({
         pro_goals: newFirstTeamProGoals,
         goals: newFirstTeamGoals,
       });
     } else {
       let points = secondTeamRank.points + 1;
-      await secondTeamRank.update({
+      secondTeam = await secondTeamRank.update({
         points,
         pro_goals: newSecondTeamGoals,
         goals: newSecondTeamProGoals,
@@ -135,13 +143,14 @@ class GamesController {
 
       points = firstTeamRank.points + 1;
 
-      await firstTeamRank.update({
+      firstTeam = await firstTeamRank.update({
         points,
         pro_goals: newFirstTeamProGoals,
         goals: newFirstTeamGoals,
       });
     }
-    return true;
+
+    return !!(secondTeam && firstTeam);
   }
 
   async checkAndAjustRankAfterUpdate(championship_id) {
@@ -184,15 +193,42 @@ class GamesController {
       return 0;
     });
 
+    const result = [];
+
     let newRank = 0;
     const promisse = ranking.forEach(async item => {
       newRank += 1;
-      await Ranking.update({ position: newRank }, { where: { id: item.id } });
+      const rank = await Ranking.update(
+        { position: newRank },
+        { where: { id: item.id } }
+      );
+      result.push(rank);
     });
 
     await Promise.all(promisse);
 
-    return true;
+    return !!result;
+  }
+
+  async checkGamesAndUpdateChampionship(championshipId) {
+    const games = await Games.findAll({
+      where: { championship_id: championshipId },
+    });
+
+    let status = true;
+
+    games.forEach(game => {
+      if (game.complete === false) {
+        status = false;
+      }
+    });
+
+    if (status) {
+      await Championship.update(
+        { complete: status },
+        { where: { id: championshipId } }
+      );
+    }
   }
 }
 
