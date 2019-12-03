@@ -9,7 +9,7 @@ export const validationGetGamesByChampionshipMiddleware = async (
     championshipId: Yup.number().required(),
   });
 
-  if (!(await schema.isValid(req.body))) {
+  if (!(await schema.isValid(req.query))) {
     return res.status(400).json({ error: 'Validation fails' });
   }
 
@@ -25,7 +25,7 @@ export const validationUpdateGamesMiddleware = async (req, res, next) => {
     secondTeamProGoals: Yup.number().required(),
   });
 
-  if (!(await schema.isValid(req.query))) {
+  if (!(await schema.isValid(req.body))) {
     return res.status(400).json({ error: 'Validation fails' });
   }
 
