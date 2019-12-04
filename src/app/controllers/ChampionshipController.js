@@ -24,6 +24,20 @@ class ChampionshipController {
   async store(req, res) {
     const { title, teams } = req.body;
 
+    const teamsData = await Team.findAll({ where: { id: teams } });
+    let dontUse = false;
+    await teamsData.forEach(team => {
+      if (team.user_id !== req.userId) {
+        dontUse = true;
+      }
+    });
+
+    if (dontUse) {
+      return res.status(401).json({
+        message: 'You dont have permission to use one or more teams',
+      });
+    }
+
     const championshipExists = await Championship.findOne({ where: { title } });
 
     if (championshipExists) {
@@ -50,8 +64,8 @@ class ChampionshipController {
     }
 
     const rankings = await championshipController.setInitialRanking(
-      teams,
-      championship.id
+      championship.id,
+      teamsData
     );
 
     return res.json({
@@ -62,70 +76,55 @@ class ChampionshipController {
     });
   }
 
-  async createGames(teams, championshipId, userId) {
-    let dontUse;
-    const promises = teams.map(async team => {
-      const checkTeam = await Team.findByPk(team);
-      if (checkTeam.user_id !== userId) {
-        dontUse = true;
-      }
-    });
-
-    await Promise.all(promises);
-
-    if (dontUse) {
-      return null;
-    }
-
+  async createGames(teams, championshipId) {
     const games = [];
 
-    teams.map(teamOne => {
-      teams.map(teamTwo => {
+    teams.forEach(teamOne => {
+      teams.forEach(teamTwo => {
         if (teamOne !== teamTwo) {
           const game = {
             championship_id: championshipId,
             first_team_id: teamOne,
             second_team_id: teamTwo,
           };
-
-          Games.create(game);
           games.push(game);
         }
       });
     });
 
+    await games.forEach(async game => {
+      await Games.create(game);
+    });
+
     return games;
   }
 
-  async setInitialRanking(teams, championshipId) {
-    const names = [];
-    const teamsWithAllData = [];
+  async setInitialRanking(championshipId, teamWithAllData) {
     const ranks = [];
 
-    const promises = teams.map(async team => {
-      const teamWithAllData = await Team.findByPk(team);
-      names.push(teamWithAllData.name);
-      teamsWithAllData.push(teamWithAllData);
+    teamWithAllData.sort((x, y) => {
+      if (x.name < y.name) {
+        return -1;
+      }
+      if (x.name > y.name) {
+        return 1;
+      }
+      return 0;
     });
 
-    await Promise.all(promises);
-
-    const alphabeticalOrder = names.sort();
-
     let classification = 0;
-    alphabeticalOrder.map(name => {
-      teamsWithAllData.map(team => {
-        if (team.name === name) {
-          classification += 1;
-          const rank = {
-            team_id: team.id,
-            championship_id: championshipId,
-            position: classification,
-          };
-          Raking.create(rank);
-          ranks.push(rank);
-        }
-      });
+    teamWithAllData.forEach(team => {
+      classification += 1;
+      const rank = {
+        team_id: team.id,
+        championship_id: championshipId,
+        position: classification,
+      };
+      ranks.push(rank);
+    });
+
+    await ranks.forEach(async rank => {
+      await Raking.create(rank);
     });
 
     return ranks;
