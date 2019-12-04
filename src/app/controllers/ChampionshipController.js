@@ -68,6 +68,12 @@ class ChampionshipController {
       teamsData
     );
 
+    if (rankings === null) {
+      return res.status(500).json({
+        message: 'Error to create rankings',
+      });
+    }
+
     return res.json({
       message: 'Sucess to create championship',
       championship,
@@ -92,11 +98,14 @@ class ChampionshipController {
       });
     });
 
-    await games.forEach(async game => {
-      await Games.create(game);
-    });
+    const results = [];
 
-    return games;
+    for await (const game of games) {
+      const result = await Games.create(game);
+      results.push(result);
+    }
+
+    return results;
   }
 
   async setInitialRanking(championshipId, teamWithAllData) {
@@ -123,11 +132,15 @@ class ChampionshipController {
       ranks.push(rank);
     });
 
-    await ranks.forEach(async rank => {
-      await Raking.create(rank);
-    });
+    const results = [];
 
-    return ranks;
+    for await (const rank of ranks) {
+      const result = await Raking.create(rank);
+
+      results.push(result);
+    }
+
+    return results;
   }
 }
 
