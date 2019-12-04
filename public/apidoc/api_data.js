@@ -205,7 +205,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Sucesso",
-          "content": "HTTP/1.1 200 OK\n{\n  \"message\": \"Sucess to find teams\",\n  \"result\": [\n              {\n                \"id\": 2,\n                \"name\": \"Flamengo\",\n                \"user_id\": 1,\n                \"updatedAt\": \"2019-12-02T13:37:17.205Z\",\n                \"createdAt\": \"2019-12-02T13:37:17.205Z\"\n              },\n              {\n                \"id\": 1,\n                \"name\": \"Sao Paulo\",\n                \"user_id\": 1,\n                \"updatedAt\": \"2019-12-02T13:37:17.204Z\",\n                \"createdAt\": \"2019-12-02T13:37:17.204Z\"\n              }\n            ]\n }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"message\": \"Sucess to find teams\",\n  \"teams\": [\n              {\n                \"id\": 2,\n                \"name\": \"Flamengo\",\n                \"user_id\": 1,\n                \"updatedAt\": \"2019-12-02T13:37:17.205Z\",\n                \"createdAt\": \"2019-12-02T13:37:17.205Z\"\n              },\n              {\n                \"id\": 1,\n                \"name\": \"Sao Paulo\",\n                \"user_id\": 1,\n                \"updatedAt\": \"2019-12-02T13:37:17.204Z\",\n                \"createdAt\": \"2019-12-02T13:37:17.204Z\"\n              }\n            ]\n }",
           "type": "json"
         }
       ]
