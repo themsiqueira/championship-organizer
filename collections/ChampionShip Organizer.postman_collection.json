@@ -1,0 +1,506 @@
+{
+	"info": {
+		"_postman_id": "901a6824-354a-445e-a8cb-a9713897755d",
+		"name": "ChampionShip Organizer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Criação de Usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Joao\",\n    \"email\": \"Joao@gmail.com\",\n    \"password\": \"senhaProvisoria\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3333/api/newUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"newUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Auth",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"Joao@gmail.com\",\n    \"password\": \"senhaProvisoria\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3333/api/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "Cria Times",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJKb2FvQGdtYWlsLmNvbSIsImlhdCI6MTU3NTI5MzgyNywiZXhwIjoxNTc1ODk4NjI3fQ.SbzLPo96aPfLZPrRxE1opYNeJbJxAW7BuBVuktO9qsE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"teams\": [\n     {\n       \"name\": \"Flamengo\"\n    },\n    {\n      \"name\": \"Sao Paulo\"\n    },\n    {\n      \"name\": \"Corinthians\"\n    },\n    {\n      \"name\": \"Santos\"\n    },\n    {\n      \"name\": \"Curitiba\"\n    }\n  ]\n\t\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3333/api/newTeam",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"newTeam"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get de times",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJKb2FvQGdtYWlsLmNvbSIsImlhdCI6MTU3NTI5MzgyNywiZXhwIjoxNTc1ODk4NjI3fQ.SbzLPo96aPfLZPrRxE1opYNeJbJxAW7BuBVuktO9qsE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3333/api/getAllTeams",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"getAllTeams"
+							]
+						},
+						"description": "Get de times criados pelo usuário logado"
+					},
+					"response": []
+				},
+				{
+					"name": "Get de time por nome",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJKb2FvQGdtYWlsLmNvbSIsImlhdCI6MTU3NTI5MzgyNywiZXhwIjoxNTc1ODk4NjI3fQ.SbzLPo96aPfLZPrRxE1opYNeJbJxAW7BuBVuktO9qsE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3333/api/getTeamByName?name=Sao Paulo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"getTeamByName"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Sao Paulo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update de time",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJKb2FvQGdtYWlsLmNvbSIsImlhdCI6MTU3NTI5MzgyNywiZXhwIjoxNTc1ODk4NjI3fQ.SbzLPo96aPfLZPrRxE1opYNeJbJxAW7BuBVuktO9qsE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"newName\": \"Tricolor\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3333/api/updateTeam",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"updateTeam"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleta Time por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJKb2FvQGdtYWlsLmNvbSIsImlhdCI6MTU3NTI5MzgyNywiZXhwIjoxNTc1ODk4NjI3fQ.SbzLPo96aPfLZPrRxE1opYNeJbJxAW7BuBVuktO9qsE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3333/api/deleteTeam",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"deleteTeam"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Championship",
+			"item": [
+				{
+					"name": "Cria Campeonato",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJKb2FvQGdtYWlsLmNvbSIsImlhdCI6MTU3NTMwNTQyNCwiZXhwIjoxNTc1OTEwMjI0fQ.vM5RUbmW7-OYHfn4KyHQlzNsYlvy2R1C43YPA1-cYQI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Campeonato Brasileiro\",\n\t\"teams\": [1,2,3,4]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3333/api/newChampionship",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"newChampionship"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Championships",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJKb2FvQGdtYWlsLmNvbSIsImlhdCI6MTU3NTMwNTQyNCwiZXhwIjoxNTc1OTEwMjI0fQ.vM5RUbmW7-OYHfn4KyHQlzNsYlvy2R1C43YPA1-cYQI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3333/api/getAllChampionships",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"getAllChampionships"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca jogos por campeonato",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJKb2FvQGdtYWlsLmNvbSIsImlhdCI6MTU3NTMwNTQyNCwiZXhwIjoxNTc1OTEwMjI0fQ.vM5RUbmW7-OYHfn4KyHQlzNsYlvy2R1C43YPA1-cYQI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3333/api/getAllGames?championshipId=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"getAllGames"
+							],
+							"query": [
+								{
+									"key": "championshipId",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualiza status do jogo e ranking",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJKb2FvQGdtYWlsLmNvbSIsImlhdCI6MTU3NTMwNTQyNCwiZXhwIjoxNTc1OTEwMjI0fQ.vM5RUbmW7-OYHfn4KyHQlzNsYlvy2R1C43YPA1-cYQI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"gameId\": 37,\n\t\"firstTeamGoals\": 3,\n\t\"secondTeamGoals\": 0,\n\t\"firstTeamProGoals\": 3,\n\t\"secondTeamProGoals\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3333/api/updateGame",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"updateGame"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca Ranking por campeonato",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJKb2FvQGdtYWlsLmNvbSIsImlhdCI6MTU3NTMwNTQyNCwiZXhwIjoxNTc1OTEwMjI0fQ.vM5RUbmW7-OYHfn4KyHQlzNsYlvy2R1C43YPA1-cYQI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3333/api/getRanking?championshipId=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"api",
+								"getRanking"
+							],
+							"query": [
+								{
+									"key": "championshipId",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
