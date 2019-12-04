@@ -6,15 +6,13 @@ class TeamController {
 
     const result = [];
 
-    const promises = teams.map(async team => {
+    for await (const team of teams) {
       const teamExists = await Team.findOne({ where: { name: team.name } });
       if (teamExists === null || teamExists === undefined) {
         const teamCreated = await Team.create({ ...team, user_id: req.userId });
         result.push(teamCreated);
       }
-    });
-
-    await Promise.all(promises);
+    }
 
     return res.json({ message: 'Sucess create new record', result });
   }

@@ -194,12 +194,20 @@ class GamesController {
     });
 
     let newRank = 0;
-    await ranking.forEach(async item => {
-      newRank += 1;
-      await Ranking.update({ position: newRank }, { where: { id: item.id } });
-    });
 
-    return true;
+    const results = [];
+
+    for await (const rank of ranking) {
+      newRank += 1;
+      const result = await Ranking.update(
+        { position: newRank },
+        { where: { id: rank.id } }
+      );
+
+      results.push(result);
+    }
+
+    return results;
   }
 
   async checkGamesAndUpdateChampionship(championshipId) {
